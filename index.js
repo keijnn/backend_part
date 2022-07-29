@@ -1,5 +1,6 @@
 //import modules
 import express from 'express'
+import cors from 'cors'
 
 //photos
 const cats = [
@@ -24,6 +25,7 @@ const randomCat = cats[Math.round(Math.random() * cats.length)]
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 
 
