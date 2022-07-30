@@ -20,19 +20,17 @@ const cats = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg1tyu4ZFghy_BFS6OFka_FasSh0ue4Lew7w&usqp=CAU',
 ]
 
-const randomCat = cats[Math.round(Math.random() * cats.length)]
+const app = express() //application
 
-const app = express()
-
-app.use(express.json())
-app.use(cors())
+app.use(express.json()) //json
+app.use(cors()) //cors
 
 
 
 app.get('/api/randomcat', (req, res) => {
-  try {
-    res.send(randomCat)
-  } catch (error) {
+  try { //if all is good
+    res.json(cats[Math.round(Math.random() * cats.length)]) //send random image
+  } catch (error) { //if error
     return res.status(500).json({
       message: error,
     })
@@ -40,7 +38,7 @@ app.get('/api/randomcat', (req, res) => {
 })
 
 
-app.listen(4444, (error) => {
+app.listen(process.env.PORT || 4444, (error) => {
   error
     ? console.log('ERROR!') //if with errors
     : console.log('Server OK!') //if without errors
