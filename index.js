@@ -6,7 +6,7 @@ import mongoose from "mongoose"
 
 mongoose
   .connect(
-    "mongodb+srv://keijnn:admin@cluster0.ben3d.mongodb.net/?retryWrites=true&w=majority" //link to the date base
+    process.env.MONGODB_URL //link to the date base
   )
   .then(() => console.log("Connected to Database"))
   //if all good
@@ -20,8 +20,8 @@ connection.on("error", console.error.bind(console, "connection error:"));
 connection.once("open", async function () {
 
   const collection  = connection.db.collection("images");
-  collection.find({}).toArray(function(err, data){
-      cats = data
+  collection.find().toArray(function(err, data){
+      data.map(row => cats.push(row.images))
   });
 
 })
@@ -31,10 +31,10 @@ const app = express() //application
 app.use(express.json()) //json
 app.use(cors()) //cors
 
-
 app.get("/api/randomcat", async (req, res) => {
   try { //if all is good
-    await res.json(cats) //send random image
+    const randomCat = cats[0]
+    await res.json(randomCat[Math.round(Math.random() * randomCat.length)]) //send random image
   } catch (error) { //if error
     return res.status(500).json({
       message: error,
